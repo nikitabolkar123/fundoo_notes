@@ -25,8 +25,8 @@ class Login(APIView):
         except Exception as e:
 
             return Response({"message":e.args[0]})
-# class RequestPasswordReset(APIView):
-#     serializer_class=ResetPasswordRequestSerializer
+class RequestPasswordReset(APIView):
+    serializer_class=ResetPasswordRequestSerializer
 #     def post(self, request):
 #         serializer = self.serializer_class(data=request.data)
 #         serializer.is_valid(raise_exception=True)
