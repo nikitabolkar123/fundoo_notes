@@ -15,7 +15,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
 
-
 class LoginSerializer(serializers.Serializer):
     # id = serializers.IntegerField(read_only=True)
     username = serializers.CharField(max_length=150)
