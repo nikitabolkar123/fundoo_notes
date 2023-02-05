@@ -5,7 +5,7 @@ from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.views import APIView
 from user.models import User
-from user.serializers import RegistrationSerializer,LoginSerializer,ResetPasswordRequestSerializer
+from user.serializers import RegistrationSerializer,LoginSerializer
 
 # Create your views here.
 class UserRegistration(APIView):
@@ -25,9 +25,4 @@ class Login(APIView):
         except Exception as e:
 
             return Response({"message":e.args[0]})
-class RequestPasswordReset(APIView):
-    serializer_class=ResetPasswordRequestSerializer
-#     def post(self, request):
-#         serializer = self.serializer_class(data=request.data)
-#         serializer.is_valid(raise_exception=True)
 #
