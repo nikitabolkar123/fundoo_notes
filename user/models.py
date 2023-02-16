@@ -6,3 +6,4 @@ from django.contrib.auth.models import AbstractUser
 class User(AbstractUser):
     city = models.CharField(max_length=100,null=True)
     phnno = models.IntegerField(null=True)
+

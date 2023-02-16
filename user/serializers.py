@@ -5,7 +5,6 @@ from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 from user.models import User
 
-
 class RegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -21,17 +20,10 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField(max_length=150)
 
     def create(self, validated_data):
-        user = authenticate(**validated_data)
+        user = authenticate(username=validated_data['username'], password=validated_data['password'])
         if not user:
-            raise Exception('Invalid Credentials')
+            raise serializers.ValidationError("Incorrect Credentials")
+        validated_data.update({'user': user})
+        self.context.update({'user': user})
         return user
 
-
-class ResetPasswordRequestSerializer(serializers.Serializer):
-    password = serializers.CharField(min_length=8)
-
-    class Meta:
-        fields = ['password']
-    # def validate (self,attrs):
-    #     try:
-    # password.get('password')
