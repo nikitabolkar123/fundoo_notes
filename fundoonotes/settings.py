@@ -38,11 +38,21 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'user',
-    'Notes',
+    'notes',
     'rest_framework',
+    'rest_framework.authtoken',
+    'celery',
+    'django_celery_results',
+    'django_celery_beat',
 
 ]
-
+#
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': (
+#         'rest_framework.authentic
+#         ation.TokenAuthentication',
+#     ),
+# }
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -88,8 +98,8 @@ DATABASES = {
     }
 }
 
-
 # Password validation
+
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -125,9 +135,51 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# MEDIA_ROOT=BASE_DIR /"images"
+# MEDIA_URL='/images/'
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'user.User'
+
+# #celery setting
+# CELERY_BROKER_URL='redis://127.0.0.1:6379,'
+# CELERY_ACCEPT_CONTENT=['application/json']
+# CELERY_RESULT_SERIALIZER='json',
+# CELERY_TIMEZONE='Asia/Kolkata'
+
+
+#celery setting
+CELERY_BROKER_URL='redis://127.0.0.1:6379'
+CELERY_ACCEPT_CONTENT=['application/json']
+CELERY_RESULT_SERIALIZER='json'
+CELERY_TASK_SERIALIZER='json'
+CELERY_TIMEZONE='Asia/Kolkata'
+CELERY_RESULT_BACKEND='django-db'
+
+
+# CELERY_RESULT_BACKEND='redis://127.0.0.1:6379'
+
+#Celery beat
+# CELERY_BEAT_SCHEDULER='django_celery_beat.schedulers:DatabaseScheduler'
+
+# otcvslajuwbzvopc
+# smtp setting
+EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS=True
+EMAIL_HOST='smtp.gmail.com'
+EMAIL_PORT=587
+EMAIL_HOST_USER='nikitabolkar9975@gmail.com'
+EMAIL_HOST_PASSWORD='otcvslajuwbzvopc'
+DEFAULT_FROM_EMAIL='Celery<nikitabolkar9975@gmail.com>'
+
+
+
+
+
+
+
