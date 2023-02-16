@@ -1,0 +1,40 @@
+from notes.models import Note
+from notes.models import Labels
+from rest_framework import serializers
+class LabelsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Labels
+        fields=['label_name','user']
+
+class DisplayLabelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Labels
+        fields=['label_name']
+
+
+class NotesSerializer(serializers.ModelSerializer):
+    label = DisplayLabelSerializer(many=True, read_only=True)
+    class Meta:
+        model = Note
+        fields = ['id', 'user','title','description','created_at','updated_at','isTrash','isArchive','image','color','label','reminder']
+        read_only_fields=['label','collaborator']
+#
+    def create(self, validated_data):
+        print(validated_data)
+        print(self.initial_data)
+        lable_name=self.initial_data.get("label")
+        note =Note.objects.create(**validated_data)
+        print(note,"322343443")
+        lable=Labels.objects.filter(label_name=lable_name)
+        print(lable,"fggfgg")
+
+        if lable.exists():
+            note.label.add(lable.first())
+            return note
+        label=Labels.objects.create(label_name=lable_name,user=validated_data.get("user"))
+        note.label.add(label)
+        return  note
+
+#
+
+
