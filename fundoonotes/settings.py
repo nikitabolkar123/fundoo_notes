@@ -46,13 +46,7 @@ INSTALLED_APPS = [
     'django_celery_beat',
 
 ]
-#
-# REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES': (
-#         'rest_framework.authentic
-#         ation.TokenAuthentication',
-#     ),
-# }
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -130,13 +124,7 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.1/howto/static-files/
-
 STATIC_URL = 'static/'
-
-# MEDIA_ROOT=BASE_DIR /"images"
-# MEDIA_URL='/images/'
 
 
 # Default primary key field type
@@ -144,15 +132,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
 AUTH_USER_MODEL = 'user.User'
-
-# #celery setting
-# CELERY_BROKER_URL='redis://127.0.0.1:6379,'
-# CELERY_ACCEPT_CONTENT=['application/json']
-# CELERY_RESULT_SERIALIZER='json',
-# CELERY_TIMEZONE='Asia/Kolkata'
-
 
 #celery setting
 CELERY_BROKER_URL='redis://127.0.0.1:6379'

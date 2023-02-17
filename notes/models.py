@@ -54,7 +54,6 @@ def schedule_task(instance,reminder_time):
         month_of_year=instance.reminder.month
     )
     existing_task=PeriodicTask.objects.filter(name=f"Task for note {instance.id}").first()
-    print(existing_task)
     if existing_task is not None:
         existing_task.crontab=schedule
         existing_task.save()

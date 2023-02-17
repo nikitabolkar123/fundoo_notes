@@ -10,7 +10,6 @@ from user.serializers import RegistrationSerializer,LoginSerializer
 # Create your views here.
 class UserRegistration(APIView):
     serializer_class=RegistrationSerializer
-
     def post(self,request):
         serializer=RegistrationSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
