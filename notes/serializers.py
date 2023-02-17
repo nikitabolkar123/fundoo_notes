@@ -20,13 +20,9 @@ class NotesSerializer(serializers.ModelSerializer):
         read_only_fields=['label','collaborator']
 #
     def create(self, validated_data):
-        print(validated_data)
-        print(self.initial_data)
         lable_name=self.initial_data.get("label")
         note =Note.objects.create(**validated_data)
-        print(note,"322343443")
         lable=Labels.objects.filter(label_name=lable_name)
-        print(lable,"fggfgg")
 
         if lable.exists():
             note.label.add(lable.first())
