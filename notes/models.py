@@ -10,7 +10,7 @@ from django.db import models
 import _datetime
 # Create your models here.
 class Labels(models.Model):
-    label_name = models.CharField(max_length=150)
+    label_name = models.CharField(max_length=150,unique=True,null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
@@ -43,7 +43,7 @@ def reminder_handler(sender,instance,**kwargs):
         current_date=datetime.now()
         reminder_date = instance.reminder.date()
         no_of_days = (reminder_date-current_date.date()).days
-        reminder_time=datetime.now()+ timedelta(days=no_of_days)
+        reminder_time=datetime.now() + timedelta(days=no_of_days)
         schedule_task(instance,reminder_time)
 
 def schedule_task(instance,reminder_time):
@@ -62,7 +62,7 @@ def schedule_task(instance,reminder_time):
         new_task=PeriodicTask.objects.create(
             crontab=schedule,
             name=f"Task for note{instance.id}",
-            task='Note.tasks.send_mail_func',
+            task='notes.tasks.send_mail_func',
             args=json.dumps([
                 instance.title,
                 instance.description,
