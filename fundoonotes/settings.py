@@ -144,6 +144,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
 AUTH_USER_MODEL = 'user.User'
 
 # #celery setting
@@ -161,11 +162,12 @@ CELERY_TASK_SERIALIZER='json'
 CELERY_TIMEZONE='Asia/Kolkata'
 CELERY_RESULT_BACKEND='django-db'
 
+CELERY_IMPORTS = [
+    'notes.tasks',
+]
 
-# CELERY_RESULT_BACKEND='redis://127.0.0.1:6379'
-
-#Celery beat
-# CELERY_BEAT_SCHEDULER='django_celery_beat.schedulers:DatabaseScheduler'
+# Celery beat
+CELERY_BEAT_SCHEDULER='django_celery_beat.schedulers:DatabaseScheduler'
 
 # otcvslajuwbzvopc
 # smtp setting
