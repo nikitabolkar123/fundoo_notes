@@ -15,7 +15,8 @@ class RegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'first_name', 'last_name', 'email', 'username', 'phnno', 'password', 'city']
-        extra_kwargs = {'password': {'write_only':True}}
+        extra_kwargs = {'password': {'write_only': True}}
+
     def create(self, validated_data):
         """
         Create and return a new user instance, given the validated data.
@@ -24,6 +25,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
             return User.objects.create_user(**validated_data)
         except Exception as ex:
             logger.exception(ex)
+
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=150)
@@ -36,4 +38,3 @@ class LoginSerializer(serializers.Serializer):
         validated_data.update({'user': user})
         self.context.update({'user': user})
         return user
-
