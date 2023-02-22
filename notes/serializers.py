@@ -31,4 +31,3 @@ class NotesSerializer(serializers.ModelSerializer):
         note.label.add(label)
         return note
 
-#

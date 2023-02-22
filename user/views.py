@@ -1,8 +1,10 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.response import Response
 from rest_framework import viewsets, status
+from rest_framework.reverse import reverse
 from rest_framework.views import APIView
 import user
 from logconfig.logger import get_logger
@@ -74,3 +76,14 @@ class Login(APIView):
         except Exception as e:
             logger.exception(e)
             return Response({"message": str(e), "status": 400, "data": {}}, status=status.HTTP_400_BAD_REQUEST)
+
+class Logout(APIView):
+    def post(self,request):
+        try:
+            if request.user.is_authenticated:
+                logout(request)
+                return HttpResponse({"message": "Logout Successfullly"})
+            else:
+                return HttpResponse({"message":"Not Login" })
+        except Exception as e:
+            return Response({"message":"An error occured during logout:{}".format(str(e))})

@@ -12,6 +12,7 @@ from django.contrib.auth import authenticate
 from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 import user.serializers
+from .utils import RedisCrud
 # Logger configuration
 logger = get_logger()
 
@@ -33,6 +34,7 @@ class NotesAPIViews(APIView):
             serializer =NotesSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
+            RedisCrud().save(serializer.data,request.user.id)
             return Response({"message": "Note Created Successfully", "status": 201, "data": serializer.data},status=status.HTTP_201_CREATED)
         except Exception as e:
             logger.exception(e)
