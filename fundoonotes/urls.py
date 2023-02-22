@@ -20,6 +20,7 @@ from drf_yasg import openapi
 from django.contrib import admin
 from django.urls import path, include
 
+
 schema_view = get_schema_view(
     openapi.Info(
         title="API Docs",
@@ -32,8 +33,16 @@ schema_view = get_schema_view(
     public=True,
     permission_classes=[permissions.AllowAny],
 )
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+    TokenVerifyView
+)
 
 urlpatterns = [
+    path('gettoken/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('refresh_token/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('verify_token/', TokenVerifyView.as_view(), name='token_verify'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('admin/', admin.site.urls),
     path('user/', include('user.urls')),
