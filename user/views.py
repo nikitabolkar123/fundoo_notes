@@ -82,7 +82,7 @@ class Logout(APIView):
         try:
             if request.user.is_authenticated:
                 logout(request)
-                return HttpResponse({"message": "Logout Successfullly"})
+                return Response({"message":"Logout Successfullly"})
             else:
                 return HttpResponse({"message":"Not Login" })
         except Exception as e:

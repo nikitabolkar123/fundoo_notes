@@ -46,9 +46,13 @@ class NotesAPIViews(APIView):
             This method get notes for user
         """
         try:
+            redis_data = RedisCrud().retrieve(request.user)
+            if redis_data:
+                return Response({"message": "Note Retrieved Successfully", "status": 200, "data": redis_data},
+                                status=status.HTTP_200_OK)
             notes = Note.objects.filter(user=request.user)
             serializer = NotesSerializer(notes,many=True)
-            return Response({"message": "Note Retrieved Successfully", "status": 200, "data": serializer.data},status=status.HTTP_200_OK)
+            return Response({"message": "Note Retrieved Successfully", "status": 200, "data":serializer.data},status=status.HTTP_200_OK)
         except Exception as e:
             logger.exception(e)
             return Response({"message": str(e), "status": 400, "data": {}}, status=status.HTTP_400_BAD_REQUEST)
@@ -64,6 +68,7 @@ class NotesAPIViews(APIView):
             serializer = NotesSerializer(notes, data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
+            RedisCrud().put(note_id,serializer.data, request.user.id)
             return Response({"message": "Note Updated Successfully", "status": 201, "data": serializer.data},status=status.HTTP_201_CREATED)
         except Exception as e:
             logger.exception(e)
@@ -77,6 +82,7 @@ class NotesAPIViews(APIView):
         try:
             notes = Note.objects.get(id=note_id)
             notes.delete()
+            RedisCrud().delete(note_id,request.user)
             return Response({"message": "Note Deleted Successfully", "status": 204, "data": {}},status=status.HTTP_204_NO_CONTENT)
         except Exception as e:
             logger.exception(e)

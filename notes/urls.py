@@ -1,7 +1,6 @@
 from django.urls import path
 from . import views
 
-
 urlpatterns = [
      path('notesapiviews/', views.NotesAPIViews.as_view(), name = 'NotesAPIViews'),
      path('notesapiviews/<int:note_id>/', views.NotesAPIViews.as_view(), name='NotesAPIViews'),
