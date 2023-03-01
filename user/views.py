@@ -10,9 +10,7 @@ import user
 from logconfig.logger import get_logger
 from user.models import User
 from user.serializers import RegistrationSerializer, LoginSerializer
-
 logger = get_logger()
-
 
 # Create your views here.
 class UserRegistration(APIView):
@@ -84,6 +82,7 @@ class Logout(APIView):
                 logout(request)
                 return Response({"message":"Logout Successfullly"})
             else:
-                return HttpResponse({"message":"Not Login" })
+                return Response({"message":"Not Login" })
         except Exception as e:
             return Response({"message":"An error occured during logout:{}".format(str(e))})
+

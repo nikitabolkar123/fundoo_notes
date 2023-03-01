@@ -2,7 +2,6 @@ import redis
 import json
 from django.shortcuts import get_object_or_404, redirect
 import user
-
 redis_client = redis.Redis(
     host='localhost',
     port=6379,
@@ -10,7 +9,6 @@ redis_client = redis.Redis(
 )
 print(redis_client)
 class RedisStore:
-
     def set(self, key, value):
         return redis_client.set(key, value)
 
