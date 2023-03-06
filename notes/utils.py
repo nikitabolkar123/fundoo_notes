@@ -1,13 +1,14 @@
-import redis
 import json
-from django.shortcuts import get_object_or_404, redirect
-import user
+
+import redis
+
 redis_client = redis.Redis(
     host='localhost',
     port=6379,
     db=0
 )
-print(redis_client)
+
+
 class RedisStore:
     def set(self, key, value):
         return redis_client.set(key, value)
@@ -15,9 +16,10 @@ class RedisStore:
     def get(self, key):
         return redis_client.get(key)
 
+
 class RedisCrud:
     def __init__(self):
-        self.redis=RedisStore()
+        self.redis = RedisStore()
 
     def save(self, notes, user_id):
         notes_dict = self.redis.get(user_id)
@@ -41,13 +43,13 @@ class RedisCrud:
                 self.redis.set(user_id, json.dumps(notes_dict))
                 return True
         return False
+
     def retrieve(self, user):
         user_id = user.id
         notes_dict = json.loads(self.redis.get(str(user_id)))
         if notes_dict is None:
             return None
         return notes_dict.values()
-
 
     def delete(self, note_id, user):
         user_id = str(user.id)

@@ -70,7 +70,7 @@ class Login(APIView):
             serializer.save()
             login(request, serializer.context.get('user'))
 
-            return Response({"message": "Login Successful", "status": 202, "data": {}}, status=status.HTTP_202_ACCEPTED)
+            return Response({"message": "Login Successful", "status": 201, "data": {}}, status=201)
         except Exception as e:
             logger.exception(e)
             return Response({"message": str(e), "status": 400, "data": {}}, status=status.HTTP_400_BAD_REQUEST)

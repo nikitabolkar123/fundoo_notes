@@ -16,7 +16,9 @@ class UserLogMiddleware:
             created = UserLog.objects.create(method=method, url=url, user=user)
 
     def __call__(self, request):
+        response = self.get_response(request)
+
         if request.user.is_authenticated:
             self.request_log(request.method, request.path, request.user)
-            response = self.get_response(request)
+            # response = self.get_response(request)
         return response

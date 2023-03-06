@@ -9,6 +9,13 @@ class LabelsSerializer(serializers.ModelSerializer):
         fields = ['label_name']
         extra_kwargs = {'user': {'required': True}}
 
+# class CollaboratorSerializer(serializers.ModelSerializer):
+#
+#     class Meta:
+#         model = Note
+#         fields = ['id', 'collaborator']
+#
+
 
 class NotesSerializer(serializers.ModelSerializer):
     label = LabelsSerializer(many=True, read_only=True)
@@ -17,7 +24,7 @@ class NotesSerializer(serializers.ModelSerializer):
         model = Note
         fields = ['id', 'user', 'title', 'description', 'isTrash', 'isArchive', 'image', 'color', 'label', 'reminder',
                   'collaborator']
-        read_only_fields = ['label', 'collaborator']
+        read_only_fields = ['label','collaborator']
 
     def create(self, validated_data):
         lable_name = self.initial_data.get("label")
