@@ -1,16 +1,17 @@
-from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponseRedirect, HttpResponse
+from django.contrib.auth import login, logout
 from django.shortcuts import render
+from django.views.generic import View
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework import status
 from rest_framework.response import Response
-from rest_framework import viewsets, status
-from rest_framework.reverse import reverse
 from rest_framework.views import APIView
-import user
+
 from logconfig.logger import get_logger
 from user.models import User
 from user.serializers import RegistrationSerializer, LoginSerializer
+
 logger = get_logger()
+
 
 # Create your views here.
 class UserRegistration(APIView):
@@ -75,14 +76,17 @@ class Login(APIView):
             logger.exception(e)
             return Response({"message": str(e), "status": 400, "data": {}}, status=status.HTTP_400_BAD_REQUEST)
 
+
 class Logout(APIView):
-    def post(self,request):
+    def post(self, request):
         try:
             if request.user.is_authenticated:
                 logout(request)
-                return Response({"message":"Logout Successfullly"})
+                return Response({"message": "Logout Successfullly"})
             else:
-                return Response({"message":"Not Login" })
+                return Response({"message": "Not Login"})
         except Exception as e:
-            return Response({"message":"An error occured during logout:{}".format(str(e))})
+            logger.exception(e)
+            return Response({"message": "An error occured during logout:{}".format(str(e))})
+
 

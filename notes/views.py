@@ -1,10 +1,11 @@
+from django.db.models import Q
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
-
+import user
 from logconfig.logger import get_logger
 from notes.models import Note, Labels
 from notes.serializers import NotesSerializer, LabelsSerializer
@@ -47,11 +48,11 @@ class NotesAPIViews(APIView):
             This method get notes for user
         """
         try:
-            redis_data = RedisCrud().retrieve(request.user)
-            if redis_data:
-                return Response({"message": "Note Retrieved Successfully", "status": 200, "data": redis_data},
-                                status=status.HTTP_200_OK)
-            notes = Note.objects.filter(user=request.user)
+            # redis_data = RedisCrud().retrieve(request.user)
+            # if redis_data:
+            #     return Response({"message": "Note Retrieved Successfully", "status": 200, "data": redis_data},
+            #                     status=status.HTTP_200_OK)
+            notes = Note.objects.filter(Q(user__id=request.user.id)| Q(collaborator__id=request.user.id),isArchive=False,isTrash=False).distinct()
             serializer = NotesSerializer(notes, many=True)
             return Response({"message": "Note Retrieved Successfully", "status": 200, "data": serializer.data},
                             status=status.HTTP_200_OK)
@@ -213,6 +214,7 @@ class ArchiveNoteList(APIView):
     @swagger_auto_schema(operation_summary='Get Archive Note ')
     def get(self, request):
         try:
+
             notes = Note.objects.filter(isArchive=True)
             serializer = NotesSerializer(notes, many=True)
             return Response({"message": "Data Retrieved Successfully", "status": 200, "data": serializer.data},
@@ -220,4 +222,53 @@ class ArchiveNoteList(APIView):
         except Exception as e:
             logger.exception(e)
             return Response({"message": str(e), "status": 400, "data": {}}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class NotesCollaboratorAPIViews(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(request_body=NotesSerializer, operation_summary='Post Collaborator')
+    def post(self, request, note_id):
+        try:
+            note = Note.objects.get(id=note_id,user=request.user.id)
+            for u_name in request.data.get('collaborator'):
+                user=User.objects.get(username=u_name)
+                if request.user != user:
+                    note.collaborator.add(user)
+            return Response({"message":"collaborator added successfully","status":200},status=200)
+        except Exception as e:
+            logger.exception(e)
+            return Response({"message": str(e)}, status=400)
+
+    @swagger_auto_schema(request_body=LabelsSerializer, operation_summary='Delete Collaborator')
+    def delete(self, request, note_id):
+        try:
+            note = Note.objects.get(id=note_id, user=request.user.id)
+            for u_name in request.data.get('username'):
+                user = User.objects.get(username=u_name)
+                if request.user != user:
+                    note.collaborator.remove(user)
+            return Response({"message": "collaborator deleted  successfully", "status": 400}, status=200)
+        except Exception as e:
+            logger.exception(e)
+            return Response({"message": str(e)}, status=400)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

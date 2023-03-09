@@ -10,6 +10,9 @@ urlpatterns = [
     path('labelsapiviews/<str:label_name>/', views.LabelsAPIViews.as_view(), name='labels_APIViews'),
     path('trashnotesapiviews/', views.TrashNotesAPIView.as_view(), name='TrashNotesAPIViews'),
     path('trashnotesapiviews/<int:note_id>/', views.TrashNotesAPIView.as_view(), name='TrashNotesAPIViews'),
-    path('notescollaborator/', views.NotesCollaboratorAPIViews.as_view(), name=' NotesCollaboratorAPIViews ')
+    path('notescollaborator/', views.NotesCollaboratorAPIViews.as_view(), name='NotesCollaboratorAPIViews'),
+    # path('notescollaborator/<int:note_id>/<int:user_id>/', views.NotesCollaboratorAPIViews.as_view(), name='NotesCollaboratorAPIViews'),
+    path('notes_collaborator/<int:note_id>/', views.NotesCollaboratorAPIViews.as_view(),name='NotesCollaboratorAPIViews'),
+    # path('notes_collaborator/<int:note_id>/collaborator/<str:collaborator_username>/', views.NotesCollaboratorAPIViews.as_view(), name='NotesCollaboratorAPIViews'),
 
 ]
