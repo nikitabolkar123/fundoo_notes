@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome Fundoo Note</title>
+     <style>
+<!--            body {-->
+<!--            background-color: rgb(20, 40, 60);&ndash;&gt;-->
+<!--        color: rgb(240, 248, 255);-->
+<!--        font-family: "Helvetica", "Arial", sans-serif;-->
+<!--        font-size: 1.3em;-->
+<!--        border: 1px solid AliceBlue;-->
+
+<!--    }-->
+<!--    .mainDiv-->
+<!--    {-->
+<!--       border: 1px solid red;-->
+<!--    }-->
+    </style>
+</head>
+<body>
+<div class="mainDiv">
+     <header class="header">
+        <h1 style="color: #2E8B57" class="content">Fundoo Notes Registration</h1>
+    </header>
+    <form class="register" method="post">
+        <div style="margin-top: 10px" class="user_details">
+            <label class="label" for="username">Username</label>
+            <input class="input" type="text" id="username" name="username" placeholder="Enter Username" required>
+        </div>
+        <div style="margin-top: 10px" class="user_details">
+            <label class="label" for="password">password</label>
+            <input class="input" type="password" id="password" name="password" placeholder="Enter Password" required>
+        </div>
+        <div style="margin-top: 10px" class="user_details">
+            <label class="label" for="first_name">First Name</label>
+            <input class="input" type="text" id="first_name" name="first_name" placeholder="Enter First Name" required>
+        </div>
+        <div style="margin-top: 10px" class="user_details">
+            <label class="label" for="last_name">Last Name</label>
+            <input class="input" type="text" id="last_name" name="last_name" placeholder="Enter Last Name" required>
+        </div>
+        <div style="margin-top: 10px" class="user_details">
+            <label class="label" for="email">Email</label>
+            <input class="input" type="email" id="email" name="email" placeholder="Enter Email ID" required>
+        </div>
+        <div style="margin-top: 10px" class="user_details">
+            <label class="label" for="phnno">Phone</label>
+            <input class="input" type="number" id="phnno" name="phnno" placeholder="Enter Phone Number" required>
+        </div>
+        <div style="margin-top: 10px" class="user_details">
+            <label class="label" for="city">City</label>
+            <input class="input" type="text" id="city" name="city" placeholder="Enter City" required>
+        </div>
+        <div style="margin-top: 10px" class="buttons">
+            <button style="background-color:red" class="button" type="reset">Cancel</button>
+            <button class="button"><a href="/login">login</a></button>
+            <button style="background-color:green" class="button" type="submit">Register</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>
