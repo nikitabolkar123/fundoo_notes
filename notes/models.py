@@ -2,12 +2,10 @@ import datetime
 import json
 from datetime import datetime
 from datetime import timedelta
-
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django_celery_beat.models import CrontabSchedule, PeriodicTask
-
 from user.models import User
 
 

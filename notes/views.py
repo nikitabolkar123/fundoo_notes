@@ -1,11 +1,12 @@
 from django.db.models import Q
+from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
-import user
+
 from logconfig.logger import get_logger
 from notes.models import Note, Labels
 from notes.serializers import NotesSerializer, LabelsSerializer
@@ -52,7 +53,8 @@ class NotesAPIViews(APIView):
             # if redis_data:
             #     return Response({"message": "Note Retrieved Successfully", "status": 200, "data": redis_data},
             #                     status=status.HTTP_200_OK)
-            notes = Note.objects.filter(Q(user__id=request.user.id)| Q(collaborator__id=request.user.id),isArchive=False,isTrash=False).distinct()
+            notes = Note.objects.filter(Q(user__id=request.user.id) | Q(collaborator__id=request.user.id),
+                                        isArchive=False, isTrash=False).distinct()
             serializer = NotesSerializer(notes, many=True)
             return Response({"message": "Note Retrieved Successfully", "status": 200, "data": serializer.data},
                             status=status.HTTP_200_OK)
@@ -228,47 +230,38 @@ class NotesCollaboratorAPIViews(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
-    @swagger_auto_schema(request_body=NotesSerializer, operation_summary='Post Collaborator')
-    def post(self, request, note_id):
+    @swagger_auto_schema(request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT, properties={
+            'collaborator': openapi.Schema(type=openapi.TYPE_ARRAY,
+                                           items=openapi.Items(type=openapi.TYPE_STRING))}),
+        responses={201: "ok", 400: "BAD REQUEST"})
+    def post(self, request, id):
         try:
-            note = Note.objects.get(id=note_id,user=request.user.id)
-            for u_name in request.data.get('collaborator'):
-                user=User.objects.get(username=u_name)
-                if request.user != user:
-                    note.collaborator.add(user)
-            return Response({"message":"collaborator added successfully","status":200},status=200)
+            note = Note.objects.get(id=id, user=request.user.id)
+            collab_list = request.data.get('collaborator')
+            for user_name in collab_list:
+                c_user = User.objects.get(username=user_name)
+                if request.user != c_user:
+                    note.collaborator.add(c_user)
+            return Response({"Message": "Collaborator Added Successfully", 'status': 200})
         except Exception as e:
             logger.exception(e)
-            return Response({"message": str(e)}, status=400)
+            return Response({"Message": str(e)}, status=400)
 
-    @swagger_auto_schema(request_body=LabelsSerializer, operation_summary='Delete Collaborator')
-    def delete(self, request, note_id):
+    @swagger_auto_schema(request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT, properties={
+            'collaborator': openapi.Schema(type=openapi.TYPE_ARRAY, items=openapi.Items(type=openapi.TYPE_STRING))}),
+        responses={201: "ok", 400: "BAD REQUEST"})
+    def delete(self, request, id):
+
         try:
-            note = Note.objects.get(id=note_id, user=request.user.id)
-            for u_name in request.data.get('username'):
-                user = User.objects.get(username=u_name)
+            note = Note.objects.get(id=id, user=request.user.id)
+            collab_list = request.data.get('collaborator')
+            for user_name in collab_list:
+                user = User.objects.get(username=user_name)
                 if request.user != user:
                     note.collaborator.remove(user)
-            return Response({"message": "collaborator deleted  successfully", "status": 400}, status=200)
+            return Response({"Message": "Collaborator Deleted Successfully", 'status': 200})
         except Exception as e:
             logger.exception(e)
             return Response({"message": str(e)}, status=400)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
